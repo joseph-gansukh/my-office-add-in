@@ -19,6 +19,8 @@ Office.onReady(info => {
         document.getElementById("unfilter-table").onclick = unFilterTable;
         document.getElementById("sort-table").onclick = sortTable;
         document.getElementById("create-chart").onclick = createChart;
+        document.getElementById("freeze-header").onclick = freezeHeader;
+        document.getElementById("open-dialog").onclick = openDialog;
         document.getElementById("sideload-msg").style.display = "none";
         document.getElementById("app-body").style.display = "flex";
     }
@@ -135,4 +137,36 @@ const createChart = () => {
                 console.log("Debug info: " + JSON.stringify(error.debugInfo));
             }
         })
+}
+
+const freezeHeader = () => {
+    Excel.run(context => {
+            const currentWorksheet = context.workbook.worksheets.getActiveWorksheet();
+            currentWorksheet.freezePanes.freezeRows(1);
+            return context.sync();
+        })
+        .catch(error => {
+            console.log("Error: " + error);
+            if (error instanceof OfficeExtension.Error) {
+                console.log("Debug info: " + JSON.stringify(error.debugInfo));
+            }
+        })
+}
+
+var dialog = null;
+
+function openDialog() {
+    Office.context.ui.displayDialogAsync(
+        'https://localhost:3000/popup.html', { height: 45, width: 55 },
+
+        function(result) {
+            dialog = result.value;
+            dialog.addEventHandler(Microsoft.Office.WebExtension.EventType.DialogMessageReceived, processMessage);
+        }
+    );
+}
+
+function processMessage(arg) {
+    document.getElementById("user-name").innerHTML = arg.message;
+    dialog.close();
 }
