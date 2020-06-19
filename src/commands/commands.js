@@ -23,7 +23,7 @@ function action(event) {
     // Show a notification message
     Office.context.mailbox.item.notificationMessages.replaceAsync("action", message);
 
-    // Be sure to indicate when the add-in command function is complete
+    // Be sure to indicate when the add-in command function is complete. 
     event.completed();
 }
 
@@ -33,7 +33,6 @@ function toggleProtection(args) {
             var sheet = context.workbook.worksheets.getActiveWorksheet();
 
             sheet.load("protection/protected");
-
             return context.sync()
                 .then(
                     function() {
