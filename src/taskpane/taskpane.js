@@ -130,6 +130,8 @@ const createChart = () => {
             chart.dataLabels.format.font.color = "black";
             chart.series.getItemAt(0).name = "Value in &euro;"
 
+            // console.log(chart)
+
             return context.sync();
         })
         .catch(error => {
